@@ -1,1 +1,1 @@
-This a weather forecast application developed using HTML, CSS and JS.
+This a weather forecast application developed using HTML, Tailwind CSS and JS.
