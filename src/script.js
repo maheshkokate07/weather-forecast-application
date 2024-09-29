@@ -1,5 +1,3 @@
-console.log("hello world!")
-
 const apiKey = "c2f0170a3f0b170472f864d83a2b94a6";
 
 async function fetchWeatherByCity(city) {
@@ -14,7 +12,7 @@ async function fetchWeatherByCity(city) {
             showErrorMessage(data.message);
         }
     } catch (err) {
-        showErrorMessage("Error fetching weather data. Please try again.");
+        showErrorMessage("Error fetching weather data. Please try again!");
     }
 }
 
@@ -30,7 +28,7 @@ async function fetchWeatherByCoordinates(lat, lon) {
             showErrorMessage(data.message);
         }
     } catch (error) {
-        showErrorMessage("Error fetching weather data. Please try again.");
+        showErrorMessage("Error fetching weather data. Please try again!");
     }
 }
 
@@ -44,7 +42,7 @@ function useCurrentLocation() {
             showErrorMessage("Unable to fetch your location!");
         })
     } else {
-        showErrorMessage("Unable to fetch your location")
+        showErrorMessage("Unable to fetch your location!")
     }
 }
 
@@ -61,8 +59,6 @@ function displayCurrentWeather(data) {
     document.getElementById('windSpeed').innerText = windSpeed;
 
     document.getElementById('weatherIcon').src = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
-
-    document.getElementById('errorMessage').classList.add('hidden');
 }
 
 function displayForecast(data) {
@@ -96,20 +92,80 @@ function displayForecast(data) {
 
 function showErrorMessage(message) {
     const errorMessageElement = document.getElementById('errorMessage');
-    errorMessageElement.innerText = message;
+    errorMessageElement.innerText = "Error: " + message;
     errorMessageElement.classList.remove('hidden');
+    errorMessageElement.style.display = 'block';
+    setTimeout(() => {
+        errorMessageElement.classList.add('hidden');
+        errorMessageElement.style.display = 'none';
+    }, 3000)
 }
+
+// Function for storing recently searched cities in localStorage
+function storeRecentCity(city) {
+    let recentCities = JSON.parse(localStorage.getItem('recentCities')) || [];
+
+    // Add recent city if it doesn't exist in the list
+    if (!recentCities.includes(city)) {
+        recentCities.push(city);
+
+        // Keep onlu last 5 cities
+        if (recentCities.length > 5) {
+            recentCities.shift();
+        }
+
+        localStorage.setItem('recentCities', JSON.stringify(recentCities));
+        updateDropdown();
+    }
+}
+
+// Function for updating the dropdown 
+function updateDropdown() {
+    let recentCities = JSON.parse(localStorage.getItem('recentCities')) || [];
+    const dropdownContainer = document.getElementById('recentCitiesContainer');
+    const dropdown = document.getElementById('recentCitiesDropdown');
+
+    // Show dropdown only if there are cities in list
+    if (recentCities.length > 0) {
+        dropdownContainer.classList.remove('hidden');
+        dropdownContainer.style.display = 'block';
+        dropdown.innerHTML = '';
+
+        recentCities.forEach(city => {
+            const option = document.createElement('option');
+            option.value = city;
+            option.text = city;
+            dropdown.appendChild(option);
+        });
+    } else {
+        dropdownContainer.classList.add('hidden');
+        dropdownContainer.style.display = 'none';
+    }
+}
+
+// Function to handle city selection from the dropdown
+document.getElementById('recentCitiesDropdown').addEventListener('change', (event) => {
+    const selectedCity = event.target.value;
+    document.getElementById('cityInput').value = selectedCity;
+    fetchWeatherByCity(selectedCity);
+});
 
 document.getElementById('searchButton').addEventListener('click', () => {
     const city = document.getElementById('cityInput').value;
     if (city) {
-        fetchWeather(city);
+        fetchWeatherByCity(city);
+        storeRecentCity(city);
     } else {
-        showErrorMessage('Please enter a valid city name.');
+        showErrorMessage('Please enter a valid city name!');
     }
 });
 
 // Add event listener to the current location button
 document.getElementById('locationButton').addEventListener('click', () => {
     useCurrentLocation();
+});
+
+// Call this function on page load to populate the dropdown with stored cities
+document.addEventListener('DOMContentLoaded', () => {
+    updateDropdown(); // Update dropdown when page loads
 });
