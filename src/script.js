@@ -2,7 +2,7 @@ console.log("hello world!")
 
 const apiKey = "c2f0170a3f0b170472f864d83a2b94a6";
 
-async function fetchWeather(city) {
+async function fetchWeatherByCity(city) {
     try {
         const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`)
         const data = await response.json();
@@ -14,7 +14,37 @@ async function fetchWeather(city) {
             showErrorMessage(data.message);
         }
     } catch (err) {
-        showErrorMessage("Some Error occured, please try again!");
+        showErrorMessage("Error fetching weather data. Please try again.");
+    }
+}
+
+// Function to fetch weather by geographic coordinates
+async function fetchWeatherByCoordinates(lat, lon) {
+    try {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`);
+        const data = await response.json();
+        if (response.status === 200) {
+            displayCurrentWeather(data);
+            displayForecast(data);
+        } else {
+            showErrorMessage(data.message);
+        }
+    } catch (error) {
+        showErrorMessage("Error fetching weather data. Please try again.");
+    }
+}
+
+function useCurrentLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            fetchWeatherByCoordinates(lat, lon);
+        }, (error) => {
+            showErrorMessage("Unable to fetch your location!");
+        })
+    } else {
+        showErrorMessage("Unable to fetch your location")
     }
 }
 
@@ -77,4 +107,9 @@ document.getElementById('searchButton').addEventListener('click', () => {
     } else {
         showErrorMessage('Please enter a valid city name.');
     }
+});
+
+// Add event listener to the current location button
+document.getElementById('locationButton').addEventListener('click', () => {
+    useCurrentLocation();
 });
