@@ -18,12 +18,16 @@
 
             <!-- Search Bar -->
             <div class="flex flex-col sm:flex-row justify-center gap-4 mb-4">
-                <input id="cityInput" type="text" placeholder="Enter city name" class="w-full sm:w-3/4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <button id="searchButton" class="w-full sm:w-1/4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md">Search</button>
+                <input id="cityInput" type="text" placeholder="Enter city name"
+                    class="w-full sm:w-3/4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <button id="searchButton"
+                    class="w-full sm:w-1/4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md">Search</button>
             </div>
             <!-- Current location bar -->
             <div>
-                <button id="locationButton" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md">Use Current Location</button>
+                <button id="locationButton"
+                    class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md">Use Current
+                    Location</button>
             </div>
 
             <!-- Current Weather Section -->
@@ -35,21 +39,21 @@
                             City: <span id="cityName" class="font-normal">Nashik</span>
                         </p>
                         <p class="text-lg font-semibold">
-                            Temperature: 
+                            Temperature:
                             <span id="temperature" class="font-normal">
                                 27
                             </span>
                             <span>°C</span>
                         </p>
                         <p class="text-lg font-semibold">
-                            Humidity: 
+                            Humidity:
                             <span id="humidity" class="font-normal">
                                 45
                             </span>
                             <span class="font-bold">%</span>
                         </p>
                         <p class="text-lg font-semibold">
-                            Wind Speed: 
+                            Wind Speed:
                             <span id="windSpeed" class="font-normal">
                                 11
                             </span>
@@ -57,7 +61,7 @@
                         </p>
                     </div>
                     <div>
-                        <img id="weatherIcon" src="//cdn.weatherapi.com/weather/64x64/day/116.png" alt="Weather Icon" class="w-16 h-16">
+                        <img id="weatherIcon" src="http://openweathermap.org/img/wn/10n@2x.png" alt="Weather Icon" class="w-32 h-32">
                     </div>
                 </div>
             </div>
@@ -70,6 +74,8 @@
                 </div>
             </div>
 
+            <!-- Error Message Section -->
+            <div id="errorMessage" class="hidden text-red-600 font-semibold text-center mt-4"></div>
 
 
             <script src="./src/script.js"></script>
